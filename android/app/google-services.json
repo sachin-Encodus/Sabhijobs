@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1028285124548",
+    "project_id": "sabhijobs-app-sachin",
+    "storage_bucket": "sabhijobs-app-sachin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1028285124548:android:c5c4fa800fd520227d1e91",
+        "android_client_info": {
+          "package_name": "com.sabhijobs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1028285124548-6ngeem10f5t7iu47u109qpkn63po0mne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASbONRPoVCs8uURVeuEaJjPTMMtOCpUZc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1028285124548-6ngeem10f5t7iu47u109qpkn63po0mne.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
