@@ -16,11 +16,12 @@ import {
   PostWise,
 } from "../constants/CategoryData";
 
-const Category = ({ navigation }) => {
+const Category = ({ navigation,loaded,interstitialAd }) => {
   return (
     <View>
       <TouchableOpacity
         onPress={() =>
+          loaded ? interstitialAd() :
           navigation.navigate("CategoryJobs", {
             data: QualificationWise,
             icon: "graduation-cap",

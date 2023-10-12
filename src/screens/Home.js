@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import RNExitApp from "react-native-exit-app";
 import {
   StyleSheet,
@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  BackHandler, Alert
+  BackHandler,
+  Alert,
 } from "react-native";
 import AppHeader from "../components/AppHeader";
 import Colors from "../constants/Colors";
@@ -23,35 +24,77 @@ import {
 
 import Category from "../components/Category";
 import Socials from "../components/Socials";
+import {
+  InterstitialAd,
+  AdEventType,
+  BannerAd,
+  TestIds,
+  BannerAdSize,
+} from "@react-native-firebase/admob";
+
+const adUnitId = "ca-app-pub-9726885479481983/7285233465";
+
+const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+  requestNonPersonalizedAdsOnly: true,
+  keywords: ["fashion", "clothing"],
+});
 
 const Home = ({ navigation, route }) => {
- const backAction = () => {
-     if (navigation.isFocused()) {
-       console.log("xxxxxxxxxxxxxxx");
-       Alert.alert("Hold on!", "Are you sure, You want to exit", [
-         {
-           text: "Cancel",
-           onPress: () => null,
-           style: "cancel",
-         },
-         { text: "YES", onPress: () => RNExitApp.exitApp() },
-       ]);
-       return true;
-     }
-   
-    };
- useEffect(() => {
-  
-   
+  const [loaded, setLoaded] = useState(false);
 
+  useEffect(() => {
+    const eventListener = interstitial.onAdEvent((type) => {
+      if (type === AdEventType.LOADED) {
+        setLoaded(true);
+      }
+      if (type === AdEventType.CLOSED) {
+        console.log("ad closed");
+        setLoaded(false);
+
+        //reload ad
+        interstitial.load();
+      }
+    });
+
+    // Start loading the interstitial straight away
+    interstitial.load();
+
+    // Unsubscribe from events on unmount
+    return () => {
+      eventListener();
+    };
+  }, []);
+
+  // No advert ready to show yet
+  // if (!loaded) {
+  //   // return null;
+  // }
+
+  const backAction = () => {
+    if (navigation.isFocused()) {
+      console.log("xxxxxxxxxxxxxxx");
+      Alert.alert("Hold on!", "Are you sure, You want to exit", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel",
+        },
+        { text: "YES", onPress: () => RNExitApp.exitApp() },
+      ]);
+      return true;
+    }
+  };
+  useEffect(() => {
+    // Unsubscribe from events on unmount
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       backAction
     );
 
-    return () => backHandler.remove();
+    return () => {
+      backHandler.remove();
+    };
   }, []);
-
 
   function firstJobs() {
     const Header = () => (
@@ -67,7 +110,7 @@ const Home = ({ navigation, route }) => {
             borderRadius: 5,
           }}
         >
-          Top Govt Jobs
+          Top Jobs
         </Text>
       </View>
     );
@@ -80,10 +123,12 @@ const Home = ({ navigation, route }) => {
           alignItems: "center",
         }}
         onPress={() =>
-          navigation.navigate("JobsList", {
-            url: item.joblink,
-            name: item.name,
-          })
+          loaded
+            ? interstitial.show()
+            : navigation.navigate("JobsList", {
+                url: item.joblink,
+                name: item.name,
+              })
         }
       >
         <View
@@ -140,11 +185,9 @@ const Home = ({ navigation, route }) => {
   }
 
   function secondJobs() {
-   
     const Header = () => (
       <View style={{ marginBottom: 10 }}>
         <Text
-        
           style={{
             fontSize: 30,
             fontWeight: "bold",
@@ -168,6 +211,8 @@ const Home = ({ navigation, route }) => {
           alignItems: "center",
         }}
         onPress={() =>
+          loaded
+          ? interstitial.show() :
           navigation.navigate("JobsList", {
             url: item.joblink,
             name: item.name,
@@ -234,7 +279,6 @@ const Home = ({ navigation, route }) => {
         headerBg={Colors.green}
         iconColor={Colors.black}
         menu="menu"
-        
         titleAlight="center"
         optionalBadge={5}
         navigation={navigation}
@@ -243,11 +287,18 @@ const Home = ({ navigation, route }) => {
         optionalIcon="bell"
         optionalFunc={() => console.log("optional")}
       />
-      <ScrollView nestedScrollEnabled={true} style={{ marginHorizontal: 5 }}>
+
+      <ScrollView nestedScrollEnabled={true}>
         <View>
-          
-          {firstJobs()}
-          {secondJobs()}
+          <View style={{ marginHorizontal: 5 }}>{firstJobs()}</View>
+          <View style={{ marginBottom: 10 }}>
+            <BannerAd
+              size={BannerAdSize.SMART_BANNER}
+              unitId={"ca-app-pub-9726885479481983/3931407852"}
+            />
+          </View>
+          <View style={{ marginHorizontal: 5 }}>{secondJobs()}</View>
+
           <View style={{ flex: 1 }}>
             <Text
               style={{
@@ -264,7 +315,8 @@ const Home = ({ navigation, route }) => {
             >
               Filter Jobs
             </Text>
-            <Category navigation={navigation} />
+            <Category  loaded={loaded} interstitialAd={()=>interstitial.show()}
+             navigation={navigation} />
             <Text
               style={{
                 padding: 4,

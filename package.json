@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "build": "cd android && gradlew app:assembleRelease",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
@@ -11,8 +12,9 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.11",
-    "@react-native-firebase/app": "^13.0.1",
-    "@react-native-firebase/messaging": "^13.0.1",
+    "@react-native-firebase/admob": "11.5.0",
+    "@react-native-firebase/app": "11.5.0",
+    "@react-native-firebase/messaging": "11.5.0",
     "@react-navigation/drawer": "5.x",
     "@react-navigation/native": "5.x",
     "@react-navigation/stack": "5.x",

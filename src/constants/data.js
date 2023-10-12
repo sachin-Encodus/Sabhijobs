@@ -119,7 +119,7 @@ const socialData = [
   },
   {
     id: 3,
-    icon: "https://image.flaticon.com/icons/png/512/124/124019.png",
+    icon: "https://cdn-icons-png.flaticon.com/512/2111/2111552.png",
     name: "Follow our Telegram Channel",
     url: "https://telegram.me/sabhijobs",
   },
@@ -131,7 +131,7 @@ const socialData = [
   },
   {
     id: 5,
-    icon: "https://image.flaticon.com/icons/png/512/1216/1216739.png",
+    icon: "https://cdn-icons-png.flaticon.com/512/1409/1409937.png",
     name: "Follow us on Twitter",
     url: "https://twitter.com/sabhijobs",
   },

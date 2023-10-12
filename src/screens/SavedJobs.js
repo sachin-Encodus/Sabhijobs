@@ -10,7 +10,13 @@ import {
 } from "react-native";
 import AppHeader from "../components/AppHeader";
 import Colors from "../constants/Colors";
-
+import {
+  InterstitialAd,
+  RewardedAd,
+  BannerAd,
+  TestIds,
+  BannerAdSize,
+} from "@react-native-firebase/admob";
 import { useState } from "react";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -73,6 +79,10 @@ const SavedJobs = ({ navigation, route }) => {
         optionalIcon="bell"
         optionalFunc={() => console.log("optional")}
       />
+      {/* <BannerAd
+        size={BannerAdSize.SMART_BANNER}
+        unitId={"ca-app-pub-9726885479481983/3931407852"}
+      /> */}
       {/* <View style={{ marginHorizontal: 10, marginTop: 5 }}> */}
       {data.length !== 0 ? (
         data &&
@@ -81,7 +91,8 @@ const SavedJobs = ({ navigation, route }) => {
             key={id}
             style={{
               marginVertical: 5,
- marginHorizontal: 10, marginTop: 5,
+              marginHorizontal: 10,
+              marginTop: 5,
               backgroundColor: "#fff",
               borderRadius: 5,
               elevation: 5,

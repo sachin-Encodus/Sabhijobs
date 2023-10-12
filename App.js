@@ -23,6 +23,7 @@ import {
   DrawerItemList,
   DrawerItem,
 } from "@react-navigation/drawer";
+
 import messaging from '@react-native-firebase/messaging';
 import PushNotification from 'react-native-push-notification';
 import Feather from "react-native-vector-icons/Feather";
@@ -33,7 +34,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {navigationRef , navigate} from "./src/RootNavigation"
-
+import InAppUpdate from "./src/components/InAppUpdate"
 import Colors from "./src/constants/Colors";
 
 import Styles from "./src/common/Styles";
@@ -53,7 +54,7 @@ import CategoryJobs from "./src/screens/CategoryJobs";
 import SearchJobs from "./src/screens/SearchJobs";
 import SplashScreen from "./src/screens/SplashScreen";
 import Demo from "./src/screens/Demo";
-
+import admob, { MaxAdContentRating } from "@react-native-firebase/admob";
 LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
 
 const Drawer = createDrawerNavigator();
@@ -219,7 +220,21 @@ const App = () => {
 
 
 
+// useEffect(() => {
+//   admob()
+//     .setRequestConfiguration({
+      
+//       maxAdContentRating: MaxAdContentRating.PG,
 
+      
+//       tagForChildDirectedTreatment: true,
+
+//       tagForUnderAgeOfConsent: true,
+//     })
+//     .then(() => {
+
+//     });
+// }, [])
 
 
 
@@ -287,32 +302,10 @@ const App = () => {
   // };
   
   useEffect(() => {
-    checkVersion();
+    InAppUpdate.checkUpdate();// this is how you check for update
   }, []);
 
-  const checkVersion = async () => {
-    try {
-      let updateNeeded = await VersionCheck.needUpdate();
 
-      if (updateNeeded && updateNeeded.isNeeded) {
-        Alert.alert(
-          "Please Update",
-          "You will have to update your app to the latest version to continue using."[
-            {
-              text: "Update",
-              onPress: () => {
-                BackHandler.exitApp();
-                Linking.openURL(updateNeeded.storeUrl);
-              },
-            }
-          ],
-          { cancelable: false }
-        );
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
 
 
 
@@ -395,5 +388,4 @@ const styles = StyleSheet.create({
 });
 
 // https://documentation.onesignal.com/docs/data-tag-implementation#gettags-method
-// i am rohit
-// a am raja
+

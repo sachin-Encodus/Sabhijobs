@@ -19,13 +19,52 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import {
+  InterstitialAd,
+  AdEventType,
+  BannerAd,
+  TestIds,
+  BannerAdSize,
+} from "@react-native-firebase/admob";
 
+const adUnitId = "ca-app-pub-9726885479481983/7285233465";
+
+const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+  requestNonPersonalizedAdsOnly: true,
+  keywords: ["fashion", "clothing"],
+});
 import dateFormat from "dateformat";
 const JobsList = ({ navigation, route }) => {
    console.log("============>>>>>>>>>>",route);
   const [list, setList] = useState([]);
   const [currentPage, setPurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const eventListener = interstitial.onAdEvent((type) => {
+      if (type === AdEventType.LOADED) {
+        setLoaded(true);
+      }
+      if (type === AdEventType.CLOSED) {
+        console.log("ad closed");
+        setLoaded(false);
+
+        //reload ad
+        interstitial.load();
+      }
+    });
+
+    // Start loading the interstitial straight away
+    interstitial.load();
+
+    // Unsubscribe from events on unmount
+    return () => {
+      eventListener();
+    };
+  }, []);
+
 
   const getjobsList = async () => {
     try {
@@ -86,6 +125,8 @@ const JobsList = ({ navigation, route }) => {
         <TouchableOpacity
           style={styles.item}
           onPress={() =>
+            loaded
+            ? interstitial.show() :
             navigation.navigate("JobDetail", {
               id: item.id,
             })

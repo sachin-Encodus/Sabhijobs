@@ -18,7 +18,13 @@ import AppHeader from "../components/AppHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors from "../constants/Colors";
 
-
+import {
+  InterstitialAd,
+  RewardedAd,
+  BannerAd,
+  TestIds,
+  BannerAdSize,
+} from "@react-native-firebase/admob";
 
 import Entypo from "react-native-vector-icons/Entypo";
 
@@ -26,7 +32,6 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
-
 
 import RenderHtml from "react-native-render-html";
 
@@ -57,11 +62,9 @@ const tagsStyles = {
     borderTopColor: "lightgray",
     borderTopWidth: 1,
   },
-  li: { color: "black", marginBottom: 5, fontSize: 15},
+  li: { color: "black", marginBottom: 5, fontSize: 15 },
   p: { lineHeight: 25, fontSize: 16 },
 };
-
-
 
 const JobDetaile = ({ navigation, route }) => {
   const { width } = useWindowDimensions();
@@ -70,22 +73,20 @@ const JobDetaile = ({ navigation, route }) => {
   const id = route.params?.id;
   const link = jobData.guid?.rendered;
 
-
   useEffect(() => {
     GetjobData();
   }, [id]);
 
   const GetjobData = async () => {
     try {
-       const res = await axios.get(
-         `https://www.sabhijobs.com/wp-json/wp/v2/posts/${id}`
-       );
+      const res = await axios.get(
+        `https://www.sabhijobs.com/wp-json/wp/v2/posts/${id}`
+      );
 
-       setJobData(res.data);
+      setJobData(res.data);
     } catch (error) {
       console.log(error);
     }
-   
   };
 
   useEffect(() => {
@@ -165,32 +166,31 @@ const JobDetaile = ({ navigation, route }) => {
   // console.log("======xxxxxxx",savejobs);
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      
-        <AppHeader
-          title={route.name}
-          headerBg={Colors.green}
-          iconColor={Colors.black}
-          menu
-          titleAlight="center"
-          optionalBadge={5}
-          navigation={navigation}
-          right="search"
-          rightFunction={() => console.log("right")}
-          optionalIcon="bell"
-          optionalFunc={() => console.log("optional")}
-        />
-      
+      <AppHeader
+        title={route.name}
+        headerBg={Colors.green}
+        iconColor={Colors.black}
+        menu
+        titleAlight="center"
+        optionalBadge={5}
+        navigation={navigation}
+        right="search"
+        rightFunction={() => console.log("right")}
+        optionalIcon="bell"
+        optionalFunc={() => console.log("optional")}
+      />
 
       <ScrollView>
         {jobData ? (
           <View>
-            <View style={{ marginHorizontal: 10, marginTop: 10 }}>
+            <View style={{ marginTop: 10 }}>
               <View
                 style={{
                   padding: 15,
                   backgroundColor: "#fff",
                   borderRadius: 5,
                   elevation: 5,
+                  marginHorizontal: 10,
                 }}
               >
                 <Text
@@ -206,7 +206,7 @@ const JobDetaile = ({ navigation, route }) => {
                   }}
                 >
                   <AntDesign name="calendar" size={24} color="#424242" />
-                  <Text style={{ color: "#424242" ,fontWeight:"800"}}>
+                  <Text style={{ color: "#424242", fontWeight: "800" }}>
                     {" "}
                     {dateFormat(jobData?.date, "mediumDate")}{" "}
                   </Text>
@@ -227,7 +227,9 @@ const JobDetaile = ({ navigation, route }) => {
                       size={30}
                       color="#1962FF"
                     />
-                    <Text style={{ color: "#424242" ,fontWeight:"800" }}>Visit site</Text>
+                    <Text style={{ color: "#424242", fontWeight: "800" }}>
+                      Visit site
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() =>
@@ -240,25 +242,38 @@ const JobDetaile = ({ navigation, route }) => {
                       size={30}
                       color="#33cc33"
                     />
-                    <Text style={{ color: "#424242" ,fontWeight:"800" }}>Whatsapp</Text>
+                    <Text style={{ color: "#424242", fontWeight: "800" }}>
+                      Whatsapp
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={onShare} style={styles.icons}>
                     <Entypo name="share" size={30} color="#0099e6" />
-                    <Text style={{ color: "#424242" ,fontWeight:"800" }}>Share</Text>
+                    <Text style={{ color: "#424242", fontWeight: "800" }}>
+                      Share
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => storeData()}
                     style={styles.icons}
                   >
                     <Ionicons name="save" size={30} color="red" />
-                    <Text style={{ color: "#424242" ,fontWeight:"800" }}>Save</Text>
+                    <Text style={{ color: "#424242", fontWeight: "800" }}>
+                      Save
+                    </Text>
                   </TouchableOpacity>
                 </View>
+              </View>
+              <View style={{ marginTop: 15 }}>
+                <BannerAd
+                  size={BannerAdSize.SMART_BANNER}
+                  unitId={"ca-app-pub-9726885479481983/3931407852"}
+                />
               </View>
 
               <View
                 style={{
-                  marginVertical: 20,
+                  marginHorizontal: 10,
+                  marginVertical: 10,
                   flex: 1,
                   padding: 10,
                   backgroundColor: "#fff",
@@ -276,6 +291,7 @@ const JobDetaile = ({ navigation, route }) => {
               </View>
               <View
                 style={{
+                  marginHorizontal: 10,
                   marginBottom: 10,
                   padding: 10,
                   backgroundColor: "#fff",
@@ -300,7 +316,9 @@ const JobDetaile = ({ navigation, route }) => {
                       color="#1962FF"
                     />
 
-                    <Text style={{ color: "#424242" ,fontWeight:"800" }}>Visit site</Text>
+                    <Text style={{ color: "#424242", fontWeight: "800" }}>
+                      Visit site
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() =>
@@ -313,18 +331,24 @@ const JobDetaile = ({ navigation, route }) => {
                       size={30}
                       color="#33cc33"
                     />
-                    <Text style={{ color: "#424242" ,fontWeight:"800" }}>Whatsapp</Text>
+                    <Text style={{ color: "#424242", fontWeight: "800" }}>
+                      Whatsapp
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={onShare} style={styles.icons}>
                     <Entypo name="share" size={30} color="#0099e6" />
-                    <Text style={{ color: "#424242" ,fontWeight:"800" }}>Share</Text>
+                    <Text style={{ color: "#424242", fontWeight: "800" }}>
+                      Share
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => storeData()}
                     style={styles.icons}
                   >
                     <Ionicons name="save" size={30} color="red" />
-                    <Text style={{ color: "#424242" ,fontWeight:"800" }}>Save</Text>
+                    <Text style={{ color: "#424242", fontWeight: "800" }}>
+                      Save
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
